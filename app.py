@@ -2,12 +2,13 @@ import streamlit as st
 from PIL import Image
 import requests
 import matplotlib.pyplot as plt
-import numpy as np
+#import numpy as np
 
 #load_dotenv()
 wiki_url = 'https://en.wikipedia.org/w/api.php'
 api_url = 'http://0.0.0.0:8000' # set it to the real api adress later on
 api_img_endpoint = '/upload_image'
+title_img_path = './images/title-img.jpg'
 
 # these are params for the wiki request
 PARAMS = {
@@ -36,7 +37,7 @@ styles = ('art nouveau',
             'ukiyo-e')
 
 st.title('Guess the arts')
-img = Image.open('/images/title-img.jpg')
+img = Image.open(title_img_path)
 st.image(img, width=100)
 
 pred_col1, pred_col2 = st.columns(2)
@@ -44,10 +45,10 @@ st.divider()
 
 with pred_col1:
     st.subheader('Choose your pic!')
-    uploaded_file = st.file_uploader("", accept_multiple_files=False)
+    uploaded_file = st.file_uploader(' ', accept_multiple_files=False, label_visibility='collapsed')
     st.divider()
     st.subheader('Make your guess!')
-    guessed_style = st.radio('', styles)
+    guessed_style = st.radio('options', styles, label_visibility='collapsed')
     st.divider()
     st.subheader('Test your knowlede!')
     if st.button('Click me!'):
@@ -84,8 +85,8 @@ with pred_col2:
 # this is optional (nice to have)
 with st.expander('Look into the kitchen!'): # show plots or other usefull info behind the wall
     if api_response!= None and api_response.status_code == 200:
-        arr = np.random.normal(1, 1, size=100) #some stuff to look at until real data is there
+        #arr = np.random.normal(1, 1, size=100) #some stuff to look at until real data is there
         fig, axs = plt.subplots(1, 2)
-        axs[0].hist(arr, bins=20)
-        axs[1].hist(arr, bins=20)
+        #axs[0].hist(arr, bins=20)
+        #axs[1].hist(arr, bins=20)
         st.pyplot(fig)
