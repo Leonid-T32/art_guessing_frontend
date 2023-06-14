@@ -1,0 +1,5 @@
+streamlit
+PIL
+requests
+matplotlib.pyplot
+numpy
