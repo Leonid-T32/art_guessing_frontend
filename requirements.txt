@@ -3,4 +3,4 @@ pillow
 requests
 matplotlib
 numpy
-io
+requires.io
