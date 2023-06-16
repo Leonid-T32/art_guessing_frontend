@@ -108,4 +108,4 @@ with pred_col2:
 
 
 # this is optional (nice to have)
-#with st.expander('Look into the kitchen!'): # show plots or other usefull info behind the wall
+# with st.expander('Look into the kitchen!'): # show plots or other usefull info behind the wall
