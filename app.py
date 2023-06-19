@@ -16,9 +16,10 @@ padding = 0
 img_mod_size = 256
 img = None
 uploaded_file = None
-
+url_with_pic = None
 show= False
-
+bytes_data= None
+img_file_buffer= None
 # these are params for the wiki request
 PARAMS = {
         "action": "opensearch",
@@ -63,10 +64,23 @@ with st.container():
         st.markdown( f'<h4>Pick your ART!</h4>',
         unsafe_allow_html=True
     )
-        uploaded_file = st.file_uploader(' ', accept_multiple_files=False, label_visibility='hidden')
-    if uploaded_file != None:
+        option = st.radio('File, link or camera?', ('File', 'Link', 'Camera'))
+        if option == "File":
+            uploaded_file = st.file_uploader(' ', accept_multiple_files=False, label_visibility='hidden')
+            if uploaded_file :
+                img = Image.open(uploaded_file)
+        elif option == "Link":
+            url_with_pic = st.text_input('Pass the art URL :')
+            if url_with_pic :
+                response = requests.get(url_with_pic)
+                img = Image.open(BytesIO(response.content))
+        elif option == 'Camera':
+            img_file_buffer = st.camera_input("Take a picture")
+            if img_file_buffer is not None:
+                img = Image.open(img_file_buffer)
+    if img != None:
         with pred_col2:
-            st.image(uploaded_file, width=300)
+            st.image(img, width=300)
         with pred_col3:
             st.markdown( f'<h4>Make a guess!</h4>',
         unsafe_allow_html=True
@@ -74,8 +88,6 @@ with st.container():
             guessed_style = st.radio('options', styles, label_visibility='collapsed')
         with pred_col4:
             padding = st.slider('Set padding!', min_value=0, max_value=100, value=0, step=10, format=None, disabled=False, label_visibility="visible")
-
-            img = Image.open(uploaded_file)
             #crop and downsize the image
             width, height = img.size
             diff = np.abs(width - height)
