@@ -54,7 +54,7 @@ st.markdown(
     f'<h1 style="text-align: center; color: #ff0330;">Guess the arts</h1>',
     unsafe_allow_html=True
 )
-st.image(image='./images/last_supper_original.jpg', use_column_width='always')
+st.image(image='./images/last_supper_wide.jpg', use_column_width='always')
 
 
 with st.container():
