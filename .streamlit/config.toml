@@ -1,0 +1,8 @@
+
+[theme] # You have to add this line
+
+primaryColor = '#3B322Bff' #van-dyke
+
+backgroundColor = '#F5E5C1ff' #dutch-white
+
+secondaryBackgroundColor = '#738881ff' #tan
