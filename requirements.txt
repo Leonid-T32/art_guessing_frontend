@@ -4,3 +4,4 @@ requests
 matplotlib
 numpy
 requires.io
+streamlit-cropper
