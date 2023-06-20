@@ -1,40 +1,21 @@
-.container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(3, auto);
-  gap: 20px;
+@font-face {
+  font-family: Ginger;
+  src: url("Ginger.woff");
 }
 
-.row {
-  display: flex;
-  flex-wrap: wrap;
+
+.css-z5fcl4 {
+  padding-top: 1rem;
+  padding-right: 1rem;
+  padding-left: 3rem;
+  padding-bottom: 1rem;
 }
 
-.col-12 {
-  flex-basis: 100%;
+.css-c6r23c .css-1drl371 {
+  padding-right: 2rem;
 }
 
-.col-6 {
-  flex-basis: 50%;
-}
-
-.banner {
-  background-image: url('./images/banner.jpg');
-  background-size: cover;
-  background-position: center;
-  text-align: center;
-  padding: 50px;
-}
-
-.radio-group {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.radio-group label {
-  flex-basis: 50%;
-}
-
-#results {
-  margin-top: 20px;
+.reportview-container .main {
+  color: 'white';
+  background-color: 'black';
 }

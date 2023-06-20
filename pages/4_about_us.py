@@ -1,11 +1,10 @@
 import streamlit as st
 
-page_icon = './images/title-img.png'
 pic_width = 100
 
 st.set_page_config(layout='wide',
-                   page_title='Art Guessing / about',
-                   page_icon=page_icon,
+                   page_title='Art Guessing / About us',
+                   page_icon='🎨',
                    initial_sidebar_state="auto")
 
 # col1, col2 = st.columns([0.4, 0.6])
@@ -14,7 +13,7 @@ st.set_page_config(layout='wide',
 st.markdown('''
                 ## About Art Guessing
                 This web app is brought to you by a group of students of the **Data Science and Machine Learning course** at **Le Wagon**.
-                ("- [https://www.lewagon.com/data-science-course](https://www.lewagon.com/data-science-course)"). 
+                ("- [https://www.lewagon.com/data-science-course](https://www.lewagon.com/data-science-course)").
                 We came up with this idea to categorise artwork ourselves, and were excited to spend two weeks working on a neural network that would be able to predict with confidence the art style of any artwork it was given,
                 and an intuitive, fun front-end for our project so users could interact with it.
                 Having graduated from the bootcamp, we now look forward to applying the knowledge we've acquired in our next professional opportunities.
@@ -38,7 +37,7 @@ with col1:
 with col2:
     st.image('./images/Laila.jpg', width=pic_width)
     st.markdown('''
-                **Laila Scur Dib:**\n
+                **Laila Dib:**\n
                 lailadib@gmail.com
                 ''')
 

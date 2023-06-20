@@ -1,8 +1,13 @@
 
 [theme] # You have to add this line
 
-primaryColor = '#3B322Bff' #van-dyke
+base = 'light'
 
-backgroundColor = '#F5E5C1ff' #dutch-white
+font = 'serif'
 
-secondaryBackgroundColor = '#738881ff' #tan
+primaryColor = '#F5D1CF'
+
+backgroundColor = '#fffaf0'
+
+secondaryBackgroundColor = '#37546B'
+#7B2E20
