@@ -21,6 +21,10 @@ params = {
     "bytes_data": None,
     "img_file_buffer": None,
     "api_response": None,
+    "image_format": ('image/jpg',
+                'image/jpeg',
+                'image/webp'
+    ),
     "styles": ('art_nouveau',
             'baroque',
             'expressionism',
@@ -82,14 +86,20 @@ def input_art():
         if option == 'File':
             uploaded_file = st.file_uploader(' ', accept_multiple_files=False, label_visibility='hidden')
             if uploaded_file:
-                img = Image.open(uploaded_file)
-                return img
+                if uploaded_file.type == 'image/jpeg' or uploaded_file.type == 'image/jpg':
+                    img = Image.open(uploaded_file)
+                    return img
+                else:
+                    st.error('Error: File uploaded is not an image of extension JPG or JPEG.', icon='🚫')
         elif option == 'Link':
             url_with_pic = st.text_input('Artwork URL:')
-            if url_with_pic :
+            if url_with_pic:
                 response = requests.get(url_with_pic)
-                img = Image.open(BytesIO(response.content))
-                return img
+                if response.headers['Content-Type'] in params['image_format']:
+                    img = Image.open(BytesIO(response.content))
+                    return img
+                else:
+                    st.error('Error: Link inputted does not result in an image in format JPG or JPEG.', icon='🚫')
         elif option == 'Camera':
             img_file_buffer = st.camera_input('Take a picture')
             if img_file_buffer is not None:
@@ -112,11 +122,13 @@ def guess_it(img):
         if img != None:
             classified_style = classify_art_style(img)
             if guessed_style == classified_style:
-                grid[0][2].subheader(f"We agree that it should be {classified_style}, so it probably is!")
-                grid[0][2].balloons()
+                grid[0][1].success(f"We agree that it should be {classified_style}, so it probably is! Yay us!", icon='🖌️')
+                grid[0][1].balloons()
+            elif classified_style == None or classified_style == 'None':
+                grid[0][1].warning("We tried our best but weren't able to classify your image. Are you sure it's an artwork?", icon='🛸')
             else:
-                grid[0][2].subheader(f"Hmmmmm, doesn't look like it to us! Are you sure?")
-                grid[0][2].snow()
+                grid[0][1].error("Hmmmmm, doesn't look like it to us! Guess we can agree to disagree!", icon='🤷🏻‍♀️')
+                #grid[0][1].snow()
                 WIKI_PARAMS['search'] = guessed_style
                 res = requests.get(url=params["wiki_url"], params=WIKI_PARAMS).json()
                 grid[0][2].write(res[3][0])
@@ -139,7 +151,7 @@ def classify_art_style(img):
 grid = make_grid(3,(1.6,3,1.6))
 
 grid[0][0].markdown(
-    f"<h2 style='text-align: left; color: #7B2E20;'>Make your educated guess on art</h2>",
+    f"<h2 style='text-align: left; color: #7B2E20; font-family: Rufina;'>Make your educated guess on art</h2>",
     unsafe_allow_html=True
 )
 grid[0][0].markdown(
@@ -152,7 +164,7 @@ grid[0][0].markdown(
 grid[0][0].markdown( f'<h4>Select and upload artwork</h4>',
         unsafe_allow_html=True
     )
-grid[0][0].info("Feel free to upload the artwork as a file, paste the URL to it, or use your camera to snap a picture of it. We'll tell you our best guess at the art style of the artwork you've submitted. Happy guessing!", icon="🖼️")
+grid[0][0].info("Upload art as a JPG or JPEG file, paste the URL, or use your camera to snap a picture of it.", icon="🖼️")
 
 img = input_art()
 cropped_image = None
