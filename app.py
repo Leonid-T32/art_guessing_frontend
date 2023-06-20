@@ -42,9 +42,26 @@ WIKI_PARAMS = {
 
 st.set_page_config(layout='wide',
                    page_title='Art guessing',
-                   page_icon='./images/banner.jpg',
+                   page_icon='🎨',
                    initial_sidebar_state= "collapsed",
                 )
+
+st.markdown("""
+        <style>
+               .css-18e3th9 {
+                    padding-top: 0rem;
+                    padding-bottom: 10rem;
+                    padding-left: 5rem;
+                    padding-right: 5rem;
+                }
+               .css-1d391kg {
+                    padding-top: 3.5rem;
+                    padding-right: 1rem;
+                    padding-bottom: 3.5rem;
+                    padding-left: 1rem;
+                }
+        </style>
+        """, unsafe_allow_html=True)
 
 def local_css(css_file):
     with open(css_file) as f:
@@ -57,7 +74,6 @@ def make_grid(cols,rows):
         with st.container():
             grid[i] = st.columns(rows)
     return grid
-
 
 def input_art():
     with grid[0][0]:
@@ -84,9 +100,8 @@ def input_art():
 def process_image(img):
     if params['img_mod_size'] < img.size[0] and params['img_mod_size'] < img.size[1]:
         img = img.resize((params['img_mod_size'], params['img_mod_size']))
-        grid[0][1].image(img, width=256)
+        grid[0][2].image(img, width=256)
     return img
-
 
 def guess_it(img):
     grid[0][2].markdown( f'<h4>Guess the style!</h4>',
@@ -97,17 +112,18 @@ def guess_it(img):
         if img != None:
             classified_style = classify_art_style(img)
             if guessed_style == classified_style:
-                grid[1][2].subheader(f'Well done! It is {classified_style}! You are the king of the arts!')
-                grid[1][2].balloons()
+                grid[0][2].subheader(f"We agree that it should be {classified_style}, so it probably is!")
+                grid[0][2].balloons()
             else:
-                grid[1][2].subheader(f'Are you kidding me? Go home and study arts!')
-                grid[1][2].snow()
+                grid[0][2].subheader(f"Hmmmmm, doesn't look like it to us! Are you sure?")
+                grid[0][2].snow()
                 WIKI_PARAMS['search'] = guessed_style
                 res = requests.get(url=params["wiki_url"], params=WIKI_PARAMS).json()
-                grid[1][2].write(res[3][0])
+                grid[0][2].write(res[3][0])
 
 def classify_art_style(img):
-    with st.spinner('Hold on while we ask ChatGPT... Just kidding!'):
+    with grid[0][2]:
+        st.spinner('Hold on while we ask ChatGPT... Just kidding!')
         # transfer image to bytes
         output = BytesIO()
         img.save(output, format='JPEG')
@@ -115,35 +131,28 @@ def classify_art_style(img):
         files = {'file': BytesIO(img_bytes)}
         # make request to the API
         api_response = requests.post(params['api_url'] + params['api_img_endpoint'], files=files) #img_bytes})
-        print(api_response)
+        print(api_response.json())
         classified_style = api_response.json()[0]['style']
         return classified_style
 
 #Grid n1 - top of the page
-top = make_grid(2,2)
+grid = make_grid(3,(1.6,3,1.6))
 
-top[0][0].markdown(
-    f"<h2 style='text-align: justify; color: #DCBF9Cff; bottom-padding: 1em;'>Make your educated guess on art</h2>",
+grid[0][0].markdown(
+    f"<h2 style='text-align: left; color: #7B2E20;'>Make your educated guess on art</h2>",
     unsafe_allow_html=True
 )
-top[0][0].markdown(
-    f"<h4 style='text-align: justify; color: #738881ff; bottom-padding: 0.5em;'>We know how hard it can be to keep different art styles in mind and categorise the artworks you're looking at, so we've built a predictive model that can help you out when you're not so sure.</h4>",
-    unsafe_allow_html=True
-
-)
-top[0][0].markdown(
-    f"<h5 style='text-align: justify; color: #738881ff; bottom-padding: 0.5em;'>Feel free to upload the artwork as a file, paste the URL to it, or use your camera to snap a picture of it. We'll tell you our best guess at the art style of the artwork you've submitted. Happy guessing!</h5>",
+grid[0][0].markdown(
+    f"<p style='text-align: justify; color: #183247;'>We know how hard it can be to keep different art styles in mind and categorise the works you're looking at, so we've built a predictive model to help you out when you're not so sure.</p>",
     unsafe_allow_html=True
 
 )
-top[0][1].image(image='./images/banner.jpg', use_column_width='always')
-
-#Grid n2 - rest of the page
-grid = make_grid(3,(1,3,1))
+#top[0][1].image(image='./images/banner.jpg', use_column_width='always')
 
 grid[0][0].markdown( f'<h4>Select and upload artwork</h4>',
         unsafe_allow_html=True
     )
+grid[0][0].info("Feel free to upload the artwork as a file, paste the URL to it, or use your camera to snap a picture of it. We'll tell you our best guess at the art style of the artwork you've submitted. Happy guessing!", icon="🖼️")
 
 img = input_art()
 cropped_image = None
@@ -152,7 +161,7 @@ if img is not None:
         cropped_image = st_cropper(img, aspect_ratio=(1, 1))
 if cropped_image:
     processed = process_image(cropped_image)
-    with grid[1][1]:
-        st.image(processed)
+    #with grid[1][2]:
+        #st.image(processed)
     print(processed.size)
     guess_it(processed)
