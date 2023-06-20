@@ -3,7 +3,7 @@ import streamlit as st
 pic_width = 100
 
 st.set_page_config(layout='wide',
-                   page_title='Art Guessing / About',
+                   page_title='Art Guessing / About us',
                    page_icon='🎨',
                    initial_sidebar_state="auto")
 
