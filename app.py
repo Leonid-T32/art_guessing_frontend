@@ -4,7 +4,6 @@ from io import BytesIO
 import requests
 import matplotlib.pyplot as plt
 import numpy as np
-import base64
 
 params = {
     "css_file": './app.css',
@@ -58,23 +57,6 @@ def make_grid(cols,rows):
             grid[i] = st.columns(rows)
     return grid
 
-# Set background image
-def add_bg_from_local(image_file):
-    with open(image_file, "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read())
-    st.markdown(
-    f"""
-    <style>
-    .stApp {{
-        background-image: url(data:images/{"jpg"};base64,{encoded_string.decode()});
-        background-size: cover;
-        background-position: center;
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-    )
-#add_bg_from_local('images/banner.jpg')
 
 def input_art():
     with grid[0][0]:
@@ -156,7 +138,6 @@ def classify_art_style(img):
         files = {'file': BytesIO(img_bytes)}
         # make request to the API
         api_response = requests.post(params['api_url'] + params['api_img_endpoint'], files=files) #img_bytes})
-        print(api_response.json())
         classified_style = api_response.json()[0]['style']
         return classified_style
 
