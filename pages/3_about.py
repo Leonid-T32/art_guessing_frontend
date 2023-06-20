@@ -31,21 +31,21 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.image('./images/Eliza.jpg', width=pic_width)
     st.markdown('''
-                **Eliza Belman:**
+                **Eliza Belman:**\n
                 elisa.belmain@gmail.com
                 ''')
 
 with col2:
     st.image('./images/Laila.jpg', width=pic_width)
     st.markdown('''
-                **Laila Scur Dib:**
+                **Laila Scur Dib:**\n
                 lailadib@gmail.com
                 ''')
 
 with col3:
     st.image('./images/Leonid.jpg', width=pic_width)
     st.markdown('''
-                **Leonid Tafler:**
+                **Leonid Tafler:**\n
                 leonid.tafler@gmail.com
                 ''')
 
@@ -55,14 +55,14 @@ col4, col5 = st.columns([0.36, 0.74])
 with col4:
     st.image('./images/Onur.jpg', width=pic_width)
     st.markdown('''
-                **Onur Özcan:**
+                **Onur Özcan:**\n
                 ozcan-onur@hotmail.com
                 ''')
 
 with col5:
     st.image('./images/Bjoern.jpg', width=pic_width)
     st.markdown('''
-                **Björn von Reumont:**
+                **Björn von Reumont:**\n
                 bmvr@reumont.net
                 ''')
 
