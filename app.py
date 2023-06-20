@@ -115,10 +115,7 @@ def classify_art_style(img):
         files = {'file': BytesIO(img_bytes)}
         # make request to the API
         api_response = requests.post(params['api_url'] + params['api_img_endpoint'], files=files) #img_bytes})
-<<<<<<< HEAD
         print(api_response)
-=======
->>>>>>> e311e05c230b13b00a0416ddbba12aa941bf2763
         classified_style = api_response.json()[0]['style']
         return classified_style
 
