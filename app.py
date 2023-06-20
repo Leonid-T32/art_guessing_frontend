@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_cropper import st_cropper
 from PIL import Image
 from io import BytesIO
 import requests
@@ -98,31 +99,7 @@ def input_art():
                 return img
     return None
 
-
-def pad_it(img):
-        #grid[0][1].image(img, width=300)
-        padding = grid[0][1].slider('Set padding!', min_value=0, max_value=100, value=0, step=10, format=None, disabled=False, label_visibility="visible")
-        img = process_image(img, padding)
-        return img
-
-def process_image(img, padding):
-    # crop and downsize the image
-    width, height = img.size
-    diff = np.abs(width - height)
-    if width != height: #crop if image is not square
-        if width > height:
-            if padding >= height/2: padding = 0 #set padding 0 to prevent cut of whole image
-            l = diff/2 + padding
-            r = l + height - 2*padding
-            t = 0 + padding
-            b = height - padding
-        elif width < height:
-            if padding >= width/2: padding = 0 #set padding 0 to prevent cut of whole image
-            l = 0 + padding
-            r = width - padding
-            t = diff/2 + padding
-            b = t + width - 2*padding
-        img = img.crop((l,t,r,b))
+def process_image(img):
     if params['img_mod_size'] < img.size[0] and params['img_mod_size'] < img.size[1]:
         img = img.resize((params['img_mod_size'], params['img_mod_size']))
         grid[0][1].image(img, width=256)
@@ -156,7 +133,7 @@ def classify_art_style(img):
         files = {'file': BytesIO(img_bytes)}
         # make request to the API
         api_response = requests.post(params['api_url'] + params['api_img_endpoint'], files=files) #img_bytes})
-        print(api_response.json())
+        print(api_response)
         classified_style = api_response.json()[0]['style']
         return classified_style
 
@@ -180,12 +157,20 @@ top[0][0].markdown(
 top[0][1].image(image='./images/banner.jpg', use_column_width='always')
 
 #Grid n2 - rest of the page
-grid = make_grid(3,(2,2,2))
+grid = make_grid(3,(1,3,1))
 
 grid[0][0].markdown( f'<h4>Select and upload artwork</h4>',
         unsafe_allow_html=True
     )
 
 img = input_art()
+cropped_image = None
 if img is not None:
-        guess_it(pad_it(img))
+    with grid[0][1]:
+        cropped_image = st_cropper(img, aspect_ratio=(1, 1))
+if cropped_image:
+    processed = process_image(cropped_image)
+    with grid[1][1]:
+        st.image(processed)
+    print(processed.size)
+    guess_it(processed)
