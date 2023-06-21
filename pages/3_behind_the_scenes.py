@@ -1,13 +1,13 @@
 import streamlit as st
 
-page_icon = './images/title-img.png'
-pic_width = 100
-
 st.set_page_config(layout='wide',
                    page_title='Art Guessing / Behind the scenes',
                    page_icon='🎨',
                    initial_sidebar_state="auto")
 
+# Logo:
+st.image('./images/LogoFinal.png', width=250, use_column_width=False)
+st.markdown(' ')
 
 # Textblock2
 st.markdown('''

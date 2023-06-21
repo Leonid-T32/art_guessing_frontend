@@ -2,10 +2,15 @@ import streamlit as st
 
 pic_width = 100
 
+
 st.set_page_config(layout='wide',
                    page_title='Art Guessing / About us',
                    page_icon='🎨',
                    initial_sidebar_state="auto")
+
+# Logo:
+st.image('./images/LogoFinal.png', width=250, use_column_width=False)
+st.markdown(' ')
 
 # col1, col2 = st.columns([0.4, 0.6])
 
