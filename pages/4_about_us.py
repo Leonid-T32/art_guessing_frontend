@@ -73,3 +73,15 @@ st.markdown('''
             * https://github.com/lailadib/art_guessing
             * https://github.com/Leonid-T32/art_guessing_frontend
             ''')
+
+# Markdown textblock separator - return and thin line
+st.markdown('---')
+
+st.markdown('''
+            ## Perspectives and future plans
+            A first technical perspective we see is to improve the prediction accuracy by **training a more specific convolutional neural network model** that runs in the background doing here all the work. 
+            Art styles are actually harder to predict than you probably imagine, so longer training and new training on the base of transfer models could probably increase the precision.
+            
+            Other ideas we have is to **predict** with the art style **also the artist**. That would be a nice additional feature after the model has been improved.
+            We could also implement then finally a **function showing similar paintings and/or artists**. 
+            ''')
