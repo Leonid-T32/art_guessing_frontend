@@ -5,6 +5,10 @@ st.set_page_config(layout='wide',
                    page_icon='🎨',
                    initial_sidebar_state="auto")
 
+# Logo:
+st.image('./images/LogoFinal.png', width=250, use_column_width=False)
+st.markdown(' ')
+
 # Textblock1
 st.markdown('''
                 ## Our dataset - art spotlight on
