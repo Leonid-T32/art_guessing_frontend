@@ -152,11 +152,10 @@ def guess_it(img):
                 grid[0][2].warning("We tried our best but weren't able to classify your image. Are you sure it's an artwork?", icon='🛸')
             else:
                 grid[0][2].error("Hmmmmm, doesn't look like it to us! Guess we can agree to disagree!", icon='🤷🏻‍♀️')
-                #grid[0][1].snow()
-                result_table(other_styles)
                 WIKI_PARAMS['search'] = guessed_style
                 res = requests.get(url=params["wiki_url"], params=WIKI_PARAMS).json()
                 grid[0][2].write(res[3][0])
+                result_table(other_styles)
 
 def result_table(results):
     for key in results.keys():
@@ -164,9 +163,9 @@ def result_table(results):
     results = dict(zip(params['styles'].keys(), results.values()))
     print(results)
 
-    with grid[0][1]:
+    with grid[0][2]:
         with st.expander("See results in detail"):
-            st.table(results)
+            st.dataframe(results, column_config={'': 'Style', 'value': 'Probability'})
 
 def classify_art_style(img):
     with grid[0][2]:
