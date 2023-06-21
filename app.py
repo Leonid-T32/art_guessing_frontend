@@ -110,6 +110,26 @@ def input_art():
                 return img
     return None
 
+def crop_max(img, padding=50):
+    width, height = img.size
+    diff = np.abs(width - height)
+    if width > height:
+        if padding >= height/2: padding = 0 #set padding 0 to prevent cut of whole image
+        l = diff/2 + padding
+        r = l + height - 2*padding
+        t = 0 + padding
+        b = height - padding
+    elif width < height:
+        if padding >= width/2: padding = 0 #set padding 0 to prevent cut of whole image
+        l = 0 + padding
+        r = width - padding
+        t = diff/2 + padding
+        b = t + width - 2*padding
+    else:
+        return img
+    cropped_img = img.crop((l,t,r,b))
+    return cropped_img
+
 def process_image(img):
     if params['img_mod_size'] < img.size[0] and params['img_mod_size'] < img.size[1]:
         img = img.resize((params['img_mod_size'], params['img_mod_size']))
@@ -139,22 +159,14 @@ def guess_it(img):
                 grid[0][2].write(res[3][0])
 
 def result_table(results):
+    for key in results.keys():
+        results[key] = f"{str((results[key]*100)).rstrip('0').rstrip('.')}%"
+    results = dict(zip(params['styles'].keys(), results.values()))
+    print(results)
+
     with grid[0][1]:
         with st.expander("See results in detail"):
-            st.data_editor(
-                results,
-                column_config={
-                    "price": st.column_config.NumberColumn(
-                        "Price (in USD)",
-                        help="The price of the product in USD",
-                        min_value=0,
-                        max_value=1000,
-                        step=1,
-                        format="$%d",
-                    )
-                },
-                hide_index=True,
-            )
+            st.table(results)
 
 def classify_art_style(img):
     with grid[0][2]:
@@ -194,11 +206,19 @@ grid[0][0].info("Upload art as a JPG or JPEG file, paste the URL, or use your ca
 
 img = input_art()
 cropped_image = None
+
+with grid[0][0]:
+    enable_crop = st.radio('Crop image:', ('Automatically', 'Manually'))
+
 if img is not None:
-    with grid[0][1]:
-        cropped_image = st_cropper(img, aspect_ratio=(1, 1))
+    if enable_crop == 'Manually':
+        with grid[0][1]:
+            cropped_image = st_cropper(img, aspect_ratio=(1, 1))
+    elif enable_crop == 'Automatically':
+        with grid[0][1]:
+            cropped_image = crop_max(img)
+            grid[0][1].image(img)
+
 if cropped_image:
     processed = process_image(cropped_image)
-    #with grid[1][2]:
-        #st.image(processed)
     guess_it(processed)
