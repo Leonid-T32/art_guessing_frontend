@@ -21,20 +21,23 @@ params = {
     "bytes_data": None,
     "img_file_buffer": None,
     "api_response": None,
-    "image_format": ('image/jpg',
-                'image/jpeg',
-                'image/webp'
+    "image_format": (
+            'image/jpg',
+            'image/jpeg',
+            'image/webp'
     ),
-    "styles": ('art_nouveau',
-            'baroque',
-            'expressionism',
-            'impressionism',
-            'post-impressionism',
-            'realism',
-            'renaissance',
-            'romanticism',
-            'surrealism',
-            'ukiyo_e')
+    "styles": {
+            'Art nouveau': 'art_nouveau',
+            'Baroque': 'baroque',
+            'Expressionism': 'expressionism',
+            'Impressionism': 'impressionism',
+            'Post-impressionism': 'post_impressionism',
+            'Realism': 'realism',
+            'Renaissance': 'renaissance',
+            'Romanticism': 'romanticism',
+            'Surrealism': 'surrealism',
+            'Ukiyo-e': 'ukiyo_e'
+    }
 }
 
 WIKI_PARAMS = {
@@ -117,17 +120,17 @@ def guess_it(img):
     grid[0][2].markdown( f'<h4>Guess the style!</h4>',
         unsafe_allow_html=True
         )
-    guessed_style = grid[0][2].radio('options', params['styles'], label_visibility='collapsed')
+    guessed_style = grid[0][2].radio('options', params['styles'].keys(), label_visibility='collapsed')
     if grid[0][2].button('Click me!'):
         if img != None:
             classified_style = classify_art_style(img)
-            if guessed_style == classified_style:
-                grid[0][1].success(f"We agree that it should be {classified_style}, so it probably is! Yay us!", icon='🖌️')
-                grid[0][1].balloons()
+            if params['styles'][guessed_style] == classified_style:
+                grid[0][2].success(f"We agree that it should be {classified_style}, so it probably is! Yay us!", icon='🖌️')
+                grid[0][2].balloons()
             elif classified_style == None or classified_style == 'None':
-                grid[0][1].warning("We tried our best but weren't able to classify your image. Are you sure it's an artwork?", icon='🛸')
+                grid[0][2].warning("We tried our best but weren't able to classify your image. Are you sure it's an artwork?", icon='🛸')
             else:
-                grid[0][1].error("Hmmmmm, doesn't look like it to us! Guess we can agree to disagree!", icon='🤷🏻‍♀️')
+                grid[0][2].error("Hmmmmm, doesn't look like it to us! Guess we can agree to disagree!", icon='🤷🏻‍♀️')
                 #grid[0][1].snow()
                 WIKI_PARAMS['search'] = guessed_style
                 res = requests.get(url=params["wiki_url"], params=WIKI_PARAMS).json()
