@@ -79,7 +79,7 @@ def make_grid(cols,rows):
     grid = [0]*cols
     for i in range(cols):
         with st.container():
-            grid[i] = st.columns(rows)
+            grid[i] = st.columns(rows, gap="large")
     return grid
 
 def input_art():
@@ -121,20 +121,40 @@ def guess_it(img):
         unsafe_allow_html=True
         )
     guessed_style = grid[0][2].radio('options', params['styles'].keys(), label_visibility='collapsed')
-    if grid[0][2].button('Click me!'):
+    if grid[0][2].button('Click me❕'):
         if img != None:
-            classified_style = classify_art_style(img)
+            classified_style, other_styles = classify_art_style(img)
             if params['styles'][guessed_style] == classified_style:
                 grid[0][2].success(f"We agree that it should be {classified_style}, so it probably is! Yay us!", icon='🖌️')
                 grid[0][2].balloons()
+                result_table(other_styles)
             elif classified_style == None or classified_style == 'None':
                 grid[0][2].warning("We tried our best but weren't able to classify your image. Are you sure it's an artwork?", icon='🛸')
             else:
                 grid[0][2].error("Hmmmmm, doesn't look like it to us! Guess we can agree to disagree!", icon='🤷🏻‍♀️')
                 #grid[0][1].snow()
+                result_table(other_styles)
                 WIKI_PARAMS['search'] = guessed_style
                 res = requests.get(url=params["wiki_url"], params=WIKI_PARAMS).json()
                 grid[0][2].write(res[3][0])
+
+def result_table(results):
+    with grid[0][1]:
+        with st.expander("See results in detail"):
+            st.data_editor(
+                results,
+                column_config={
+                    "price": st.column_config.NumberColumn(
+                        "Price (in USD)",
+                        help="The price of the product in USD",
+                        min_value=0,
+                        max_value=1000,
+                        step=1,
+                        format="$%d",
+                    )
+                },
+                hide_index=True,
+            )
 
 def classify_art_style(img):
     with grid[0][2]:
@@ -146,12 +166,15 @@ def classify_art_style(img):
         files = {'file': BytesIO(img_bytes)}
         # make request to the API
         api_response = requests.post(params['api_url'] + params['api_img_endpoint'], files=files) #img_bytes})
-        print(api_response.json())
         classified_style = api_response.json()[0]['style']
-        return classified_style
+        if api_response.json()[1]:
+            other_styles = api_response.json()[1]
+        else:
+            other_styles = 'None'
+        return classified_style, other_styles
 
 #Grid n1 - top of the page
-grid = make_grid(3,(1.6,3,1.6))
+grid = make_grid(3,(2,3,2))
 
 grid[0][0].markdown(
     f"<h2 style='text-align: left; color: #7B2E20; font-family: Rufina;'>Make your educated guess on art</h2>",
@@ -178,5 +201,4 @@ if cropped_image:
     processed = process_image(cropped_image)
     #with grid[1][2]:
         #st.image(processed)
-    print(processed.size)
     guess_it(processed)
