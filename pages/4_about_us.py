@@ -17,8 +17,7 @@ st.markdown(' ')
 # with col1:
 st.markdown('''
                 ## About Art Guessing
-                This web app is brought to you by a group of students of the **Data Science and Machine Learning course** at **Le Wagon**.
-                ("- [https://www.lewagon.com/data-science-course](https://www.lewagon.com/data-science-course)").
+                This web app is brought to you by a group of students of the [**Data Science and Machine Learning course** at **Le Wagon**](https://www.lewagon.com/data-science-course).
                 We came up with this idea to categorise artwork ourselves, and were excited to spend two weeks working on a neural network that would be able to predict with confidence the art style of any artwork it was given,
                 and an intuitive, fun front-end for our project so users could interact with it.
                 Having graduated from the bootcamp, we now look forward to applying the knowledge we've acquired in our next professional opportunities.
@@ -35,7 +34,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.image('./images/Eliza.jpg', width=pic_width)
     st.markdown('''
-                **Eliza Belman:**\n
+                **Eliza Belmain:**\n
                 elisa.belmain@gmail.com
                 ''')
 
@@ -83,10 +82,10 @@ st.markdown('''
 st.markdown('---')
 
 st.markdown('''
-            ## Perspectives and future plans
-            A first technical perspective we see is to improve the prediction accuracy by **training a more specific convolutional neural network model** that runs in the background doing here all the work. 
-            Art styles are actually harder to predict than you probably imagine, so longer training and new training on the base of transfer models could probably increase the precision.
-            
-            Other ideas we have is to **predict** with the art style **also the artist**. That would be a nice additional feature after the model has been improved.
-            We could also implement then finally a **function showing similar paintings and/or artists**. 
+            ## Future plans
+            The first technical endeavour we would embark on would be improving the prediction accuracy of our app by **training a more specific convolutional neural network model** to take over the work behind the scenes.
+            Art styles are actually harder to predict than you probably imagine, so longer training and/or new training of transfer models could probably increase the precision.
+
+            Other ideas we have include building a model that will **predict the artist** rather than the art style. That would be a nice additional feature after we've improved the original model.
+            We've also discussed building a new model which would take an artwork as input and return **the artwork and/or artist it identifies as most similar**.
             ''')
