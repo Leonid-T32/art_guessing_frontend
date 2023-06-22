@@ -160,13 +160,13 @@ def guess_it(img):
 def result_table(results):
     print("results before:", results)
     for key in results.keys():
-        results[key] = f"{str(round((results[key]*100))).rstrip('0').rstrip('.')}%"
+        results[key] = '{:.0f}'.format((results[key]*100))
     results = dict(zip(params['styles'].keys(), results.values()))
     print("results after:", results)
 
     with grid[0][2]:
         with st.expander("See results in detail"):
-            st.dataframe(results, column_config={'': 'Style', 'value': 'Probability'})
+            st.dataframe(results, column_config={'': 'Style', 'value': 'Probability [%]'})
 
 def classify_art_style(img):
     with grid[0][2]:
