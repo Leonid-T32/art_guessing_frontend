@@ -158,11 +158,10 @@ def guess_it(img):
                 result_table(other_styles)
 
 def result_table(results):
-    print("results before:", results)
     for key in results.keys():
-        results[key] = '{:.0f}'.format((results[key]*100))
+        results[key] = int('{:.0f}'.format((results[key]*100)))
     results = dict(zip(params['styles'].keys(), results.values()))
-    print("results after:", results)
+    results = dict(sorted(results.items(), key=lambda item: item[1], reverse=True))
 
     with grid[0][2]:
         with st.expander("See results in detail"):
